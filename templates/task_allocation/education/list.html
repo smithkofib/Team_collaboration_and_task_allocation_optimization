@@ -1,0 +1,103 @@
+{% extends '../base.html' %} {% block title %} Education - {{ candidate.first_name }} {{ candidate.last_name }} {% endblock %} {% block content %}
+<h2>
+  Education Details for {{ candidate.first_name }} {{ candidate.last_name }}
+</h2>
+<a href="{% url 'add_education' candidate.id %}" class="btn btn-success mb-3"
+  >Add Education</a
+>
+<table class="table table-striped">
+  <thead class="table-dark">
+    <tr>
+      <th>Institution</th>
+      <th>Degree</th>
+      <th>Field of Study</th>
+      <th>Years</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for edu in education %}
+    <tr>
+      <td>{{ edu.institution_name }}</td>
+      <td>{{ edu.degree }}</td>
+      <td>{{ edu.field_of_study }}</td>
+      <td>
+        {{ edu.start_year }} - {% if edu.end_year %} {{ edu.end_year }} {% else %} Present {% endif %}
+      </td>
+      <td>
+
+          <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal"
+          onclick="showApprovedCandidateDetails('{{ edu.id }}', '{{candidate.id}}')" >View</button>
+
+      
+        <a
+          href="{% url 'edit_education' edu.id candidate.id %}"
+          class="btn btn-warning btn-sm"
+          >Edit</a
+        >
+        <a
+          href="{% url 'delete_education' edu.id candidate.id %}"
+          class="btn btn-danger btn-sm"
+          onclick="return confirm('Are you sure you want to delete this candidate education records?');"
+          >Delete</a
+        >
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="4" class="text-center">No education records found.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<a href="{% url 'candidate_list' %}" class="btn btn-secondary"
+  >Back to Candidates</a
+>
+<!-- Modal -->
+<div class="modal fade " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  function showApprovedCandidateDetails(eductionId, candidateId) {
+    //alert(eductionId + " " + candidateId);
+    //console.log("eductionId", eductionId);
+    fetch(`/education/${eductionId}/${candidateId}/view_details/`)
+      .then((response) => response.json())
+      .then((data) => {
+        document.querySelector(".modal-title").innerText =
+          data.eduction_details.institution_name + " \n "+ data.eduction_details.degree;
+        document.querySelector(".modal-body").innerHTML = `
+          <h3>Candidate Details</h3>
+          <p><strong>First Name:</strong> ${data.candidate_details.first_name}</p>
+          <p><strong>Last Name:</strong> ${data.candidate_details.last_name}</p>
+          <p><strong>Email:</strong> ${data.candidate_details.email}</p>
+          <p><strong>Phone:</strong> ${data.candidate_details.phone}</p>
+          
+          <p>---------------------------------------------------------</p>
+          
+
+          <h3>Education Details</h3>
+          <p><strong>Institution:</strong> ${data.eduction_details.institution_name}</p>
+          <p><strong>Degree:</strong> ${data.eduction_details.degree}</p>
+          <p><strong>Field of Study:</strong> ${data.eduction_details.field_of_study}</p>
+          <p><strong>Start Year:</strong> ${data.eduction_details.start_year}</p>
+          <p><strong>End Year:</strong> ${
+            data.eduction_details.end_year ? data.eduction_details.end_year : "Present"}</p>
+        `;
+      });
+    
+  }
+</script>
+{% endblock %}

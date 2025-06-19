@@ -1,0 +1,16 @@
+{% extends '../base.html' %} 
+{% block title %}
+Add Feedback for {{candidate.first_name }} {{ candidate.last_name }}
+{% endblock %} 
+{% block content %}
+<div class="card shadow-sm">
+  <div class="card-header bg-info text-white">Add Feedback</div>
+  <div class="card-body">
+    <form method="POST">
+      {% csrf_token %} {{ form.as_p }}
+      <button type="submit" class="btn btn-primary">Submit Feedback</button>
+      <a href="{% url 'candidate_list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

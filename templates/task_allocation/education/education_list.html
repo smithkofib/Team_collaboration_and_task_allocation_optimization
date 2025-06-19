@@ -1,0 +1,40 @@
+{% extends '../base.html' %} 
+{% block title %}Education Records{% endblock %} 
+{% block content %}
+<div class="d-flex justify-content-between align-items-center">
+  <h2>Education Records</h2>
+  <a href="{% url 'add_education' %}" class="btn btn-success">Add Education</a>
+</div>
+
+<table class="table table-striped mt-3">
+  <thead class="table-dark">
+    <tr>
+      <th>Institution</th>
+      <th>Degree</th>
+      <th>Year</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for education in educations %}
+    <tr>
+      <td>{{ education.institution }}</td>
+      <td>{{ education.degree }}</td>
+      <td>{{ education.year }}</td>
+      <td>
+        <a
+          href="{% url 'delete_education' education.id %}"
+          class="btn btn-danger btn-sm"
+          onclick="return confirm('Are you sure?');"
+          >Delete</a
+        >
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="4" class="text-center">No education records found.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

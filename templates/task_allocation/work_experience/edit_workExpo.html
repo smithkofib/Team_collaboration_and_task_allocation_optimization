@@ -1,0 +1,14 @@
+{% extends '../base.html' %} {% block title %}Edit Education{% endblock %} 
+{%block content%}
+<div class="card shadow-sm">
+  <div class="card-header bg-warning text-white">Edit Work Experience</div>
+  <div class="card-body">
+    <form method="POST">
+      {% csrf_token %} {{ form.as_p }}
+      <button type="submit" class="btn btn-primary">Update</button>
+      <a href="{% url 'work_experience_list' candidate_id %}" class="btn btn-secondary">Cancel</a>
+    </form>
+  </div>
+</div>
+{%endblock%}
+

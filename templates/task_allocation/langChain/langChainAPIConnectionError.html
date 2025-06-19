@@ -1,0 +1,10 @@
+<!-- templates/task_allocation/results.html -->
+{% extends '../base.html' %}
+{% block content %}
+<center>
+    <p><strong class="text-center text-danget">{{ error }}</strong></p>
+</center>
+<a href="{% url 'departement_list' %}" class="btn btn-secondary">
+    Back
+</a>
+{% endblock %}

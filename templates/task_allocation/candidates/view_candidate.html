@@ -1,0 +1,32 @@
+{% extends '../base.html' %}
+{% block title %}{{ candidate.first_name }} {{ candidate.last_name }}{% endblock %}
+{% block content %}
+<div class="card shadow-sm">
+  <div class="card-header bg-info text-white">Candidate Details</div>
+  <div class="card-body">
+    <h5>{{ candidate.first_name }} {{ candidate.last_name }}</h5>
+    <p>Email: {{ candidate.email }}</p>
+    <p>Phone: {{ candidate.phone }}</p>
+    {% if candidate.resume %}
+    <p>Resume: Yes</p>
+    {% else %}
+    <p>Resume: No</p>
+    {% endif %}
+    {% if candidate.certificate %}
+    <p>Certificate: Yes</p>
+    {% else %}
+    <p>Certificate: No</p>
+    {% endif %}
+    <p>Gender: {{ candidate.gender }}</p>
+    {% if candidate.role == "no_role" %}
+    <p class="text-danger">Role: Not approved</p>
+    {% else %}
+    <p class="text-success">Role: candidate.role</p>
+    {% endif %}
+    <a href="{% url 'candidate_list' %}" class="btn btn-secondary">Back</a>
+    <a href="{% url 'edit_candidate' candidate.id %}" class="btn btn-warning">Edit</a>
+    <a href="{% url 'delete_candidate' candidate.id %}" class="btn btn-danger"
+      onclick="return confirm('Are you sure you want to delete this candidate?');">Delete</a>
+  </div>
+</div>
+{% endblock %}

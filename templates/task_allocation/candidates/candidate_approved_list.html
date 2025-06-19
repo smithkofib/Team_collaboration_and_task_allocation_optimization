@@ -1,0 +1,121 @@
+{% extends '../base.html' %} {% block title %}Approved Candidates{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center">
+  <h2>Candidates</h2>
+  {% comment %}
+  <a href="{% url 'add_candidate' %}" class="btn btn-success">Add Candidate</a>
+  {% endcomment %}
+</div>
+
+<table class="table table-striped mt-3">
+  <thead class="table-dark">
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>New Role</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for approved_candidate in approved_candidates %}
+    <tr>
+      <td>
+        {{ approved_candidate.first_name }} {{ approved_candidate.last_name }}
+      </td>
+      <td>{{ approved_candidate.email }}</td>
+      <td>{{ approved_candidate.role }}</td>
+      <td>
+        <button
+          type="button"
+          class="btn btn-info btn-sm"
+          data-bs-toggle="modal"
+          data-bs-target="#exampleModal"
+          onclick="showApprovedCandidateDetails({{ approved_candidate.id }})"
+        >
+          View
+        </button>
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="3" class="text-center">No candidates found.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Staff Details</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div id="message"></div>
+        <div>
+          <ul id="education-list" class="list-group"></ul>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  function showApprovedCandidateDetails(candidateId) {
+    console.log("employeeId  ", candidateId);
+    fetch(`/staff/${candidateId}/`)
+      .then((response) => response.json())
+      .then((data) => {
+        const items = data.educations.degree;
+        const approvedStatus =
+          data.candidate_approval === "approved" ? "Approved" : "";
+        document.querySelector(".modal-title").innerText =
+          data.first_name + " " + data.last_name;
+        document.querySelector("#message").innerHTML = `
+          <div class="d-flex justify-content-between align-items-center">
+            <p><strong>Full Name :</strong> ${data.first_name} ${data.last_name}</p>
+            <p class="text-success"><strong>${approvedStatus}</strong></p>
+          </div>
+
+          <p><strong>Email :</strong> ${data.email}</p>
+          <p><strong>Phone :</strong> ${data.phone}</p>
+          <p><strong>Role :</strong> ${data.role}</p>
+
+          <hr class="mt-2 mb-3">
+
+          <p><strong>Education Degree :</strong></p>
+        `;
+        const ul = document.querySelector("#education-list");
+        ul.innerHTML = " ";
+        if (items.lenght == 0) {
+          li.textContent = "No data";
+          ul.appendChild(li);
+        } else {
+          items.forEach((item) => {
+            const li = document.createElement("li");
+            li.className = "list-group-item";
+            li.textContent = item;
+            ul.appendChild(li);
+          });
+        }
+      });
+  }
+</script>
+{% endblock %}

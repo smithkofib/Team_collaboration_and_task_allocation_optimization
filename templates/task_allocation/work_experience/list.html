@@ -1,0 +1,108 @@
+{% extends '../base.html' %} {% block title %}Work Experience - {{
+  candidate.first_name }} {{ candidate.last_name }} {% endblock %} 
+  {% block content %}
+  <h2>
+    Work Experience for {{ candidate.first_name }} {{ candidate.last_name }}
+  </h2>
+  <a
+    href="{% url 'add_work_experience' candidate.id %}"
+    class="btn btn-success mb-3"
+    >Add Work Experience</a
+  >
+  
+  <table class="table table-striped">
+    <thead class="table-dark">
+      <tr>
+        <th>Job Title</th>
+        <th>Company</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for experience in experiences %}
+      <tr>
+        <td>{{ experience.job_title }}</td>
+        <td>{{ experience.company_name }}</td>
+        <td>{{ experience.start_date }}</td>
+        <td>
+          {% if experience.end_date %} {{ experience.end_date }} {% else %}
+          Present {%endif %}
+        </td>
+        <td>
+          <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal"
+          onclick="showApprovedCandidateDetails('{{ experience.id }}', '{{candidate.id}}')" >View</button>
+  
+          <a
+            href="{% url 'edit_work_experience' experience.id candidate.id %}"
+            class="btn btn-warning btn-sm"
+            >Edit</a
+          >
+          <a
+            href="{% url 'delete_work_experience' experience.id candidate.id %}"
+            class="btn btn-danger btn-sm"
+            onclick="return confirm('Are you sure you want to delete this work experience?');"
+            >Delete</a
+          >
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="4" class="text-center">No work experience found.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <a href="{% url 'candidate_list' %}" class="btn btn-secondary"
+    >Back to Candidates</a>
+  <!-- Modal -->
+  <div class="modal fade " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    function showApprovedCandidateDetails(experienceId, candidateId) {
+      //alert(eductionId + " " + candidateId);
+      //console.log("eductionId", eductionId);
+      fetch(`/work-experience/${experienceId}/${candidateId}/view_details/`)
+        .then((response) => response.json())
+        .then((data) => {
+          document.querySelector(".modal-title").innerText =
+            "As " + data.work_experience_details.job_title + " at "+ data.work_experience_details.company_name;
+          document.querySelector(".modal-body").innerHTML = `
+            <h3>Candidate Details</h3>
+            <p><strong>First Name:</strong> ${data.candidate_details.first_name}</p>
+            <p><strong>Last Name:</strong> ${data.candidate_details.last_name}</p>
+            <p><strong>Email:</strong> ${data.candidate_details.email}</p>
+            <p><strong>Phone:</strong> ${data.candidate_details.phone}</p>
+            
+            <p>---------------------------------------------------------</p>
+            
+  
+            <h3>working Experience Details</h3>
+            <p><strong>Job Title:</strong> ${data.work_experience_details.job_title}</p>
+            <p><strong>Company Name:</strong> ${data.work_experience_details.company_name}</p>
+            <p><strong>Start Year:</strong> ${data.work_experience_details.start_date}</p>
+            <p><strong>End Year:</strong> ${
+              data.work_experience_details.end_date ? data.work_experience_details.end_date : "Present"}</p>
+            <strong>Responsibilities:</strong><textarea rows=10 style="width:100%; border : 1px solid #999999; box-sizing : content-box;">${data.work_experience_details.responsibilities}</textarea>
+          `;
+        });
+      
+    }
+  </script>
+  
+  {% endblock %}
+  

@@ -1,0 +1,13 @@
+{% extends 'task_allocation/base.html' %}{% block title %}Home - HR Management{% endblock %}
+{% block content %}
+<div class="jumbotron text-center">
+  <h1 class="display-4">Welcome to HR Management System</h1>
+  <p class="lead">
+    Manage candidates, skills, assessments, and feedback efficiently.
+  </p>
+  <hr class="my-4" />
+  <a class="btn btn-primary btn-lg" href="{% url 'candidate_list' %}"
+    >View Candidates</a
+  >
+</div>
+{% endblock %}

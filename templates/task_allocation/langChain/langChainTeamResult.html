@@ -1,0 +1,6 @@
+<!-- templates/task_allocation/results.html -->
+<h1>Task Allocation Result</h1>
+<p><strong>Employee:</strong> {{ employee.name }}</p>
+<p><strong>Allocated Task:</strong> {{ task.name }}</p>
+<p><strong>Explanation:</strong> {{ explanation }}</p>
+<a href="{% url 'allocate_task' %}">Back</a>

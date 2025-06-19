@@ -1,0 +1,300 @@
+{% extends '../base.html' %} {% block title %}Department{% endblock %} 
+{% block content %}
+<div class="d-flex justify-content-between align-items-center">
+  <h2>{{ departement.departement_name}}</h2>
+  <div>
+    <button
+      type="button"
+      class="btn btn-primary"
+      data-bs-toggle="modal"
+      data-bs-target="#aiAllocatorModal"
+      data-bs-whatever="@fat"
+    >
+      AI Allocator
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      data-bs-toggle="modal"
+      data-bs-target="#aiGroupAllocatorModal"
+      data-bs-whatever="@fat"
+    >
+      Group Allocator
+    </button>
+  </div>
+</div>
+<h6 class="title text-secondary">
+  List of all staffs in the {{ departeement.departement_name}}
+</h6>
+
+<table class="table table-striped mt-3">
+  <thead class="table-dark">
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>Phone</th>
+      <th>Role</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for staff in staffs %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>{{ staff.candidate.first_name }} {{ staff.candidate.last_name }}</td>
+      <td>{{ staff.candidate.phone }}</td>
+      <td>{{ staff.candidate.role }}</td>
+      <td>
+        <button
+          type="button"
+          class="btn btn-info btn-sm"
+          data-bs-toggle="modal"
+          data-bs-target="#exampleModal"
+          onclick="showEmployeeDetails({{ staff.id }}, {{ staff.candidate.id }})"
+        >
+          View Staffs
+        </button>
+        <a
+          href=""
+          class="btn btn-danger btn-sm"
+          onclick="return confirm('Are you sure?');"
+          >Delete</a
+        >
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="4" class="text-center">No department found.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Staff Details</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AI Group Allocator Modal -->
+<div
+  class="modal fade"
+  id="aiGroupAllocatorModal"
+  tabindex="-1"
+  aria-labelledby="aiAllocatorModallLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="aiAllocatorModalLabel">
+          Group Role Allocation
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form
+          method="POST"
+          action="{% url 'group_role_predict' departement.id %}"
+        >
+          {% csrf_token %}
+          <div class="contain-fluid">
+            <div class="row">
+              <div class="mb-3 col-sm-8">
+                <label for="job-name" class="col-form-label"
+                  >Type of Role:</label
+                >
+                <input type="text" class="form-control" name="job-name" />
+              </div>
+              <div class="mb-3 col-sm-4">
+                <label for="number-of-staffs" class="col-form-label"
+                  >No. of staffs:</label
+                >
+                <input
+                  type="number"
+                  class="form-control"
+                  name="number-of-staffs"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="contain-fluid">
+            <div class="row">
+              <div class="mb-3 col-sm-8">
+                <label for="gender" class="col-form-label">Gender:</label>
+                <select name="gender" required>
+                  <option value="Both Males and Females">Both</option>
+                  <option value="Males">Male</option>
+                  <option value="Females">Female</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="role-description-text" class="col-form-label"
+              >Role Description:</label
+            >
+            <textarea
+              class="form-control"
+              name="role-description-text"
+              required
+            ></textarea>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <input type="submit" value="Allocate" class="btn btn-primary" />
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AI Allocator Modal -->
+<div
+  class="modal fade"
+  id="aiAllocatorModal"
+  tabindex="-1"
+  aria-labelledby="aiAllocatorModallLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="aiAllocatorModalLabel">Role Allocation</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="{% url 'predict_role' departement.id %}">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="job-name" class="col-form-label">Type of Role:</label>
+            <input type="text" class="form-control" name="job-name" required />
+          </div>
+          <div class="mb-3">
+            <label for="role-description-text" class="col-form-label"
+              >Role Description:</label
+            >
+            <textarea
+              class="form-control"
+              name="role-description-text"
+              required
+            ></textarea>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <input type="submit" value="Allocate" class="btn btn-primary" />
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function showEmployeeDetails(staffId, employeeId) {
+    console.log("employeeId", employeeId);
+    fetch(`/staff/${staffId}/${employeeId}/`)
+      .then((response) => response.json())
+      .then((data) => {
+        document.querySelector(".modal-title").innerText =
+          data.first_name + " " + data.last_name + " Details";
+        document.querySelector(".modal-body").innerHTML = `
+          <p><strong>Full Name:</strong> ${data.first_name} ${
+          data.last_name
+        }</p>
+          <p><strong>Email:</strong> ${data.email}</p>
+          <p><strong>Phone:</strong> ${data.phone}</p>
+          <p><strong>Date of Birth:</strong> ${data.dob}</p>
+          <p><strong>Role:</strong> ${data.role}</p>
+          
+          <p class="mt-5"><strong>Departement Details</strong></p>
+          <hr class="mt-0 mb-2">
+          <p><strong>Departement:</strong> ${data.departement_name}</p>
+          <p><strong>Departement Tele:</strong> ${data.departement_phone}</p>
+          <p><strong>Departement Room No.:</strong> ${
+            data.departement_room_number
+          }</p>
+         
+          <hr/>
+
+          <table class='table'>
+          <tr>
+            <th>Institution Names</th> 
+          </tr>
+           ${data.educations.name.map(
+             (element) => `
+            <tr>
+              <td>${element}</td>
+            </tr>`
+           )}
+            
+          </table>
+
+          <hr/>
+          
+          <table class='table'>
+          <tr>
+            <th>Institution Degrees</th> 
+          </tr>
+           ${data.educations.degree.map(
+             (element) => `
+            <tr>
+              <td>${element}</td>
+            </tr>`
+           )}
+            
+          </table>
+        `;
+      });
+  }
+</script>
+{% endblock %}

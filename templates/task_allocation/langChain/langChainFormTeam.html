@@ -1,0 +1,12 @@
+<!-- templates/task_allocation/results.html -->
+<h1>Team Allocation</h1>
+<form method="post">
+  {% csrf_token %}
+  <label for="employee_id">View Teams:</label>
+  <select name="employee_id" id="employee_id">
+    {% for employee in employees %}
+    <option value="{{ employee.id }}">{{ employee.name }}</option>
+    {% endfor %}
+  </select>
+  <button type="submit">Allocate Task</button>
+</form>

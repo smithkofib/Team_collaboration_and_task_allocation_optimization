@@ -1,0 +1,6 @@
+<!-- team_task_allocation_proj/templates/task_allocation/index.html -->
+<h1>Task Allocation Result</h1>
+<p><strong>Employee:</strong> {{ employee.name }}</p>
+{% comment %}
+<p><strong>Allocated Task:</strong> {{ task.name }}</p>
+{% endcomment %} <a href="{% url 'allocate_task' %}">Back</a>

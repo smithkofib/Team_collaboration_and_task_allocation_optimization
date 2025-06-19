@@ -1,0 +1,14 @@
+{% extends '../base.html' %} 
+{% block title %}Register Candidate{% endblock %} 
+{% block content %}
+<div class="card shadow-sm">
+  <div class="card-header bg-primary text-white">Add Candidate</div>
+  <div class="card-body">
+    <form method="POST">
+      {% csrf_token %} {{ workExpform.as_p, educationform.as_p }}
+      <button type="submit" class="btn btn-success">Save</button>
+      <a href="{% url 'candidate_list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

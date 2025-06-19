@@ -1,0 +1,18 @@
+<!-- templates/task_allocation/results.html -->
+{% extends '../base.html' %}
+{% block title %} Staff role predictor {% endblock %}
+{% block content %}
+<h1>AI Staff Role Allocator</h1>
+<h3 class="title fa fa-italic">This predicts the right staff for a position and explains why that staff merits the
+    position</h3>
+<p><strong>Position:</strong> {{ position }}</p>
+<p><strong>Predicted Staff:</strong> {{ predicted_candidate.text }}</p>
+<p><strong>Explanation:</strong></p>
+<textarea class="w-10 d-block py-10" cols="150" rows="15"> {{ predicted_role_explanation.text }} </textarea>
+<br>
+<a href="{% url 'register_list' %}" class="btn btn-secondary">
+    Back
+</a>
+<a class="btn btn-success" href="">Approve</a>
+
+{% endblock %}

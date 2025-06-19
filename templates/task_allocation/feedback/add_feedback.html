@@ -1,0 +1,14 @@
+{% extends '../base.html' %} 
+{% block title %}Add Feedback{% endblock %} 
+{% block content %}
+<div class="card shadow-sm">
+  <div class="card-header bg-primary text-white">Add Feedback</div>
+  <div class="card-body">
+    <form method="POST">
+      {% csrf_token %} {{ form.as_p }}
+      <button type="submit" class="btn btn-success">Submit</button>
+      <a href="{% url 'home' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

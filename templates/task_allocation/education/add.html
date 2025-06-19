@@ -1,0 +1,20 @@
+{% extends '../base.html' %} 
+{% block title %}
+Add Education for {{ candidate.first_name }} {{ candidate.last_name }}
+{% endblock %} 
+{% block content %}
+<div class="card shadow-sm">
+  <div class="card-header bg-success text-white">Add Education</div>
+  <div class="card-body">
+    <form method="POST">
+      {% csrf_token %} {{ form.as_p }}
+      <button type="submit" class="btn btn-success">Add Education</button>
+      <a
+        href="{% url 'education_list' candidate.id %}"
+        class="btn btn-secondary"
+        >Cancel</a
+      >
+    </form>
+  </div>
+</div>
+{% endblock %}

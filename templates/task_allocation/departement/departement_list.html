@@ -1,0 +1,39 @@
+{% extends '../base.html' %}
+{% block title %}Department{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center">
+  <h2>Departements</h2>
+  <a href="{% url 'add_departement' %}" class="btn btn-success">Add Department</a>
+</div>
+
+<table class="table table-striped mt-3">
+  <thead class="table-dark">
+    <tr>
+      <th>#</th>
+      <th>Room No.</th>
+      <th>Department Name</th>
+      <th>Department Phone</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for departement in departements %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>{{ departement.departement_room_number }}</td>
+      <td>{{ departement.departement_name }}</td>
+      <td>{{ departement.departement_phone }}</td>
+      <td>
+        <a href="{% url 'departement_staff_list' departement.id %}" class="btn btn-info btn-sm">View Staffs</a>
+        <a href="{% url 'delete_departement' departement.id %}" class="btn btn-danger btn-sm"
+          onclick="return confirm('Are you sure?');">Delete</a>
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="4" class="text-center">No departement found.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
