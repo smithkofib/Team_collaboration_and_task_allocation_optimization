@@ -1,7 +1,7 @@
 1. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/yourusername/team-collab-app.git
+   git clone [https://github.com/yourusername/team-collab-app.git](https://github.com/smithkofib/Team_collaboration_and_task_allocation_optimization.git)
    cd team-collab-app
   
 
