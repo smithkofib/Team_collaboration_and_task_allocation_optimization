@@ -395,7 +395,8 @@ def predict_job(request, candidate_id):
     except APIConnectionError:
         return render(request, 'task_allocation/langChain/langChainAPIConnectionError.html', {"error":"Unable to connect to remote system. Please check your internet"})
     except Exception as e:
-        return render(request, 'task_allocation/langChain/langChainAPIConnectionError.html', {"error":"Ununknown error occuired, please connacte the developer for assistance"})
+        #return JsonResponse({"r":"kkkkkk", "e":str(e)})
+        return render(request, 'task_allocation/langChain/langChainAPIConnectionError.html', {"error":"Internal server error. Please contact the developer for assitance. Error Incorrect API Key Provided. Vist https://platform.openai.com/account/api-keys to get your API Key. "})
 
 
 ### LangChain predict role for staffs within a department view
@@ -465,7 +466,7 @@ def predict_role(request, departement_id):
             #return JsonResponse({"r":"dddd"})
         except Exception as e:
             #return render(request, 'task_allocation/langChain/langChainAPIConnectionError.html', {"error":"Ununknown error occuired, please connacte the developer for assistance"})
-            return JsonResponse({"r":"kkkkkk", "e":e})
+            return render(request, 'task_allocation/langChain/langChainAPIConnectionError.html', {"error":"Internal server error. Please contact the developer for assitance. Error Incorrect API Key Provided. Vist https://platform.openai.com/account/api-keys to get your API Key."})
     else:
         return JsonResponse({"r":"kkkkkk"})
     
@@ -540,7 +541,8 @@ def group_role_predict(request, departement_id):
             #return JsonResponse({"r":"dddd"})
         except Exception as e:
             #return render(request, 'task_allocation/langChain/langChainAPIConnectionError.html', {"error":"Ununknown error occuired, please connacte the developer for assistance"})
-            return JsonResponse({"r":"kkkkkk", "e":e})
+            #return JsonResponse({"r":"kkkkkk", "e":str(e)})
+            return render(request, 'task_allocation/langChain/langChainAPIConnectionError.html', {"error":"Internal server error. Please contact the developer for assitance. Error Incorrect API Key Provided. Vist https://platform.openai.com/account/api-keys to get your API Key."})
     else:
         return JsonResponse({"r":"kkkkkk"})
 
